@@ -1,6 +1,6 @@
 import { Context } from 'https://edge.netlify.com'
 
-export default async (context: Context) => {
+export default async (request: Request, context: Context) => {
 	let locationLabel
 	let timezone
 	let locale
