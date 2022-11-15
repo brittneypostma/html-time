@@ -1,30 +1,22 @@
 import { Context } from 'https://edge.netlify.com'
-import iplocation from 'https://cdn.skypack.dev/iplocation'
 
-// Note: rate limits!  https://github.com/Richienb/iplocation#providers
-
-export default async (request: Request, context: Context) => {
-	// determine location and probable locale from the IP address
-	let location
+export default async (context: Context) => {
 	let locationLabel
 	let timezone
 	let locale
 	try {
-		location = context?.ip
-		const res = await fetch(`https://ipapi.co/${location}/json/`)
-		const ipData = await res.json()
 		const city = context?.geo?.city
 		const country = context?.geo?.country?.name
 		locationLabel = `${city}, ${country}`
+		timezone = context?.geo?.timezone || 'Asia/Jakarta'
 		const options = Intl.DateTimeFormat().resolvedOptions()
 		locale = options.locale
-		timezone = ipData.timezone || 'Asia/Jakarta'
 	} catch (error) {
 		throw new Error(error.message)
 	}
 
 	// Generate a formatted time string
-	let time = new Date().toLocaleString(locale, {
+	const time = new Date().toLocaleString(locale, {
 		timeZone: timezone,
 		weekday: 'long',
 		year: 'numeric',
