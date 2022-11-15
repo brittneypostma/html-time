@@ -4,6 +4,7 @@ export default async (context: Context) => {
 	let locationLabel
 	let timezone
 	let locale
+	console.log(context)
 	try {
 		const city = context?.geo?.city
 		const country = context?.geo?.country?.name
@@ -25,18 +26,14 @@ export default async (context: Context) => {
 		hour: 'numeric',
 		minute: 'numeric'
 	})
-	try {
-		// Get the page content
-		const response = await context.next()
-		const page = await response.text()
+	// Get the page content
+	const response = await context.next()
+	const page = await response.text()
 
-		// Replace the content
-		const regex_time = /CURRENT_TIME/gi
-		const regex_place = /CURRENT_LOCATION/gi
-		let updatedPage = page.replace(regex_time, time)
-		updatedPage = updatedPage.replace(regex_place, locationLabel)
-		return new Response(updatedPage, response)
-	} catch (error) {
-		throw new Error(error.message)
-	}
+	// Replace the content
+	const regex_time = /CURRENT_TIME/gi
+	const regex_place = /CURRENT_LOCATION/gi
+	let updatedPage = page.replace(regex_time, time)
+	updatedPage = updatedPage.replace(regex_place, locationLabel)
+	return new Response(updatedPage, response)
 }
