@@ -36,7 +36,7 @@ export default async (context: Context) => {
 		let updatedPage = page.replace(regex_time, time)
 		updatedPage = updatedPage.replace(regex_place, locationLabel)
 		return new Response(updatedPage, response)
-	} catch (e) {
-		return new Error(e.message)
+	} catch (error) {
+		throw new Error(error.message)
 	}
 }
